@@ -1,81 +1,71 @@
-const User = require("../Models/users_model");
-const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
-exports.registerUser = async (req, res) => {
+const User = require("../Models/users_model");
+
+// ✅ Register User
+const registerUser = async (req, res) => {
   try {
-    let { Name, Email, Password } = req.body;
+    const { Name, Email, Password } = req.body;
 
-    if (!Email || !Password || !Name) {
-      return res.status(400).json({ msg: "All fields are required" });
-    }
-
-    const lowercaseEmail = Email.toLowerCase(); // ✅ Ensure Email is always lowercase
-    console.log("🔹 Registering Email:", lowercaseEmail);
-    console.log("🔹 Plain Password (Before Hashing):", Password);
-
-    let existingUser = await User.findOne({ Email: lowercaseEmail });
+    // Check if user already exists
+    const existingUser = await User.findOne({ Email });
     if (existingUser) {
-      return res.status(400).json({ msg: "Email already exists" });
+      return res.status(400).json({ message: "User already exists" });
     }
 
-    let saltRounds = 10;
-    let hashedPassword = await bcrypt.hash(Password, saltRounds);
-    
-    console.log("🔹 Hashed Password Before Saving:", hashedPassword); // ✅ Debugging
+    // Hash password
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(Password, salt);
 
-    let newUser = new User({ Name, Email: lowercaseEmail, Password: hashedPassword });
+    // Create new user
+    const newUser = new User({ Name, Email, Password: hashedPassword });
+
     await newUser.save();
-
-    res.status(201).json({ msg: "User registered successfully" });
+    res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
-    console.error("❌ Registration Error:", error);
-    res.status(500).json({ msg: "Internal Server Error" });
+    res.status(500).json({ message: "Error registering user", error });
   }
 };
 
-
-
-
-exports.loginUser = async (req, res) => {
+// ✅ Login User
+const loginUser = async (req, res) => {
   try {
     const { Email, Password } = req.body;
-    console.log("🔹 Input Email:", Email);
-    console.log("🔹 Input Password:", Password);
 
+    console.log("Login Request Received:", req.body); // ✅ Log input data
+
+    // Check if user exists
     const user = await User.findOne({ Email });
     if (!user) {
-      return res.status(400).json({ msg: "Invalid Email or Password" });
+      return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    console.log("🔹 Stored Hashed Password from DB:", user.Password);
+    console.log("User Found:", user); // ✅ Log user data
 
+    // Compare hashed password
     const isMatch = await bcrypt.compare(Password, user.Password);
-    
-    console.log("🔹 Comparing:", Password, "with", user.Password);
-    console.log("🔹 Password Match Result:", isMatch ? "✅ Matched" : "❌ Not Matched");
-
     if (!isMatch) {
-      return res.status(400).json({ msg: "Invalid Email or Password" });
+      return res.status(400).json({ message: "Invalid email or password" });
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+    console.log("Password Matched!"); // ✅ Log success
 
-    res.json({ msg: "Login successful", token, user });
+    res.status(200).json({ message: "Login successful" });
   } catch (error) {
-    console.error("❌ Login Error:", error);
-    res.status(500).json({ msg: "Internal Server Error" });
+    console.log("Error logging in:", error); // ✅ Log error in console
+    res.status(500).json({ message: "Error logging in", error });
   }
 };
 
 
-
-// Fetch All Users
-exports.getUsers = async (req, res) => {
+// ✅ Get All Users
+const getUsers = async (req, res) => {
   try {
-    let users = await User.find().select("-Password"); // Hide passwords
-    res.json(users);
+    const users = await User.find({}, "-Password"); // Exclude password field
+    res.status(200).json(users);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ msg: "Internal Server Error" });
+    res.status(500).json({ message: "Error fetching users", error });
   }
 };
+
+// ✅ Export Controllers
+module.exports = { registerUser, loginUser, getUsers };
