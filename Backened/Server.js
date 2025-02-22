@@ -8,6 +8,7 @@ const boothRoutes = require("./Routes/Boothroute");
 const expoRoutes = require("./Routes/exporoute");
 const registrationRoutes = require("./Routes/registerationroute"); 
 const scheduleRoutes = require("./Routes/scheduleroute");
+const exhibitorRoutes = require("./Routes/exhibitor_routes");
 
 const app = express();
 app.use(express.json());
@@ -19,7 +20,7 @@ app.use("/api/expos", expoRoutes);
 app.use("/api/registrations", registrationRoutes); 
 app.use("/api/schedules", scheduleRoutes);
 app.use("/api/dashboard", dashboardRoute);
-
+app.use("/api/exhibitors", exhibitorRoutes);
 mongoose
   .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("✅ MongoDB Connected"))
