@@ -1,38 +1,55 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
+.dashboard {
+  padding-top: 80px; /* Ensure content starts below navbar */
   min-height: 100vh;
+  background: linear-gradient(90deg, #4B79A1, #283E51);
+  width: 100vw; /* Full viewport width */
+  overflow-x: hidden; /* Hide extra horizontal scroll */
+}
+
+/* Fix Container to Fit Full Width */
+.dashboard-container {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+  width: 100%;
 }
 
-.App-link {
-  color: #61dafb;
+
+/* Cards Section */
+.dashboard-cards {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+  justify-content: center; /* Center align */
+  width: 100%;
+  margin-top: 290px;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.card {
+  width: 250px; /* Increase width */
+  padding: 20px;
+  text-align: center;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  color: black;
+  font-weight: bold;
+  /* margin-left: 10px; */
+}
+
+/* Charts Section */
+.chart-container {
+  background: white;
+  padding: 20px;
+  margin-top: 30px;
+  margin-left: 370px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+  color: black;
+  width: 100%;
+  max-width: 1080px;
+  
+}
+.main-content {
+    margin-left: 250px; /* Same as sidebar width */
+    width: calc(100% - 250px);
+    padding: 20px;
 }

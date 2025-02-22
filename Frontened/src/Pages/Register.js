@@ -1,6 +1,7 @@
 import React, { useState } from "react";
+import axios from "axios";
 import { FaUser, FaEnvelope, FaLock, FaPhone } from "react-icons/fa";
-import "./style.css"; // Yahan updated CSS ko import karein
+import "./style.css";
 
 const Register = () => {
   const [formData, setFormData] = useState({
@@ -11,20 +12,52 @@ const Register = () => {
     role: "ATTENDEE",
   });
 
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Form Submitted:", formData);
-    alert("Signup Successful!");
+    setError("");
+    setSuccess("");
+  
+    try {
+      const requestData = {
+        Name: formData.username,  // ✅ Map username to Name
+        Email: formData.email,
+        Password: formData.password,
+      };
+  
+      console.log("Sending Request:", requestData); // ✅ Debugging
+      const response = await axios.post("http://localhost:8000/api/users/register", requestData);
+  
+      if (response.data) {
+        setSuccess("Signup Successful! Redirecting...");
+        setFormData({
+          username: "",
+          email: "",
+          password: "",
+          contactNumber: "",
+          role: "ATTENDEE",
+        });
+        setTimeout(() => {
+          window.location.href = "/login";
+        }, 2000);
+      }
+    } catch (error) {
+      console.error("Error:", error.response?.data); // ✅ Print error
+      setError(error.response?.data?.message || "Registration failed");
+    }
   };
-
+  
   return (
     <div className="register-container">
       <div className="register-box">
         <h1>Sign Up</h1>
+        {error && <p className="error-message">{error}</p>}
+        {success && <p className="success-message">{success}</p>}
         <form onSubmit={handleSubmit}>
           <div className="input-container">
             <FaUser />

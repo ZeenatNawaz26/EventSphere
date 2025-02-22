@@ -1,30 +1,30 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { FaUser, FaLock, FaFacebookF, FaTwitter, FaGoogle } from 'react-icons/fa'; // Import required icons
+import { FaUser, FaLock, FaFacebookF, FaTwitter, FaGoogle } from 'react-icons/fa';
 import './style.css';
 
 const Login = () => {
-  const [username, setUsername] = useState('');
+  const [useremail, setUseremail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:8000/api/users/login', {
-        Email:username,
-        Password:password,
+        Email: useremail, // ✅ Change email to useremail
+        Password: password,
       });
 
       // Assuming the response includes the token and the username
       if (response.data) {
-        localStorage.setItem('username', username);  // Store the username in localStorage
-        localStorage.setItem('token', response.data.token);  // Store the token in localStorage
+        localStorage.setItem('email', useremail);  // ✅ Use useremail instead of email
+        localStorage.setItem('token', response.data.token);
         alert('Login successful!');
-        window.location.href = '/dashboard'; // Redirect to Dashboard
+        window.location.href = '/dashboard';
       }
     } catch (error) {
-        console.log(error)
-      alert(error);
+      console.log(error);
+      alert(error.response?.data?.message || "Login failed");
     }
   };
 
@@ -36,10 +36,10 @@ const Login = () => {
           <div className="input-container">
             <FaUser /> 
             <input
-              type="text"
-              placeholder="Type your username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
+              type="email"
+              placeholder="Type your email"
+              value={useremail}  // ✅ Use useremail instead of email
+              onChange={(e) => setUseremail(e.target.value)}
               required
             />
           </div>
