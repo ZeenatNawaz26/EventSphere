@@ -1,17 +1,15 @@
 const express = require("express");
+const { registerExhibitor, getAllExhibitors, updateExhibitor } = require("../Controllers/exhibitor_controller");
+
 const router = express.Router();
-const exhibitorController = require("../Controllers/exhibitor_controller");
 
-// ✅ Register a new Exhibitor
-router.post("/register", exhibitorController.registerExhibitor);
+// ✅ POST: Register Exhibitor
+router.post("/register", registerExhibitor);
 
-// ✅ Get all Exhibitors
-router.get("/", exhibitorController.getAllExhibitors);
+// ✅ GET: Fetch All Exhibitors
+router.get("/", getAllExhibitors);
 
-// ✅ Approve/Reject Exhibitor
-router.put("/:id/status", exhibitorController.updateExhibitorStatus);
-
-// ✅ Assign Booth
-router.put("/:id/assign-booth", exhibitorController.assignBooth);
+// ✅ PUT: Update Exhibitor (Fix: Function Defined Properly)
+router.put("/:id", updateExhibitor);
 
 module.exports = router;

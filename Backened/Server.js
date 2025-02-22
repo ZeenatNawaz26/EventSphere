@@ -21,6 +21,7 @@ app.use("/api/registrations", registrationRoutes);
 app.use("/api/schedules", scheduleRoutes);
 app.use("/api/dashboard", dashboardRoute);
 app.use("/api/exhibitors", exhibitorRoutes);
+
 mongoose
   .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log("✅ MongoDB Connected"))

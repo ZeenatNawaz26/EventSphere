@@ -1,16 +1,22 @@
-const Booth = require("../Models/booths_model"); 
+const Booth = require("../Models/booths_model");
 
 // ✅ Create a new Booth
 const createBooth = async (req, res) => {
   try {
-    const { expo, exhibitor, size, price } = req.body;
+    const { number, location, expo } = req.body;
 
-    // Validation - Ensure all required fields are present
-    if (!expo || !exhibitor || !size || !price) {
-      return res.status(400).json({ message: "All fields (expo, exhibitor, size, price) are required" });
+    // Validation
+    if (!number || !location || !expo) {
+      return res.status(400).json({ message: "All fields (number, location, expo) are required" });
     }
 
-    const newBooth = new Booth({ expo, exhibitor, size, price });
+    // Check if booth number already exists
+    const existingBooth = await Booth.findOne({ number });
+    if (existingBooth) {
+      return res.status(400).json({ message: "Booth number already exists" });
+    }
+
+    const newBooth = new Booth({ number, location, expo });
     await newBooth.save();
     
     res.status(201).json({ message: "Booth created successfully", booth: newBooth });
@@ -24,8 +30,8 @@ const createBooth = async (req, res) => {
 const getAllBooths = async (req, res) => {
   try {
     const booths = await Booth.find()
-      .populate("expo", "name date location") // Populate expo details
-      .populate("exhibitor", "name company email"); // Populate exhibitor details
+      .populate("expo", "name date location") 
+      .populate("exhibitor", "name company email"); 
 
     res.status(200).json(booths);
   } catch (error) {
@@ -49,6 +55,66 @@ const getBoothById = async (req, res) => {
   } catch (error) {
     console.error("❌ Error fetching booth:", error);
     res.status(500).json({ message: "Error fetching booth", error: error.message });
+  }
+};
+
+// ✅ Assign an Exhibitor to a Booth
+const assignBooth = async (req, res) => {
+  try {
+    const { boothId, exhibitorId } = req.body;
+
+    if (!boothId || !exhibitorId) {
+      return res.status(400).json({ message: "Booth ID and Exhibitor ID are required" });
+    }
+
+    // Find booth and check if it's available
+    const booth = await Booth.findById(boothId);
+    if (!booth) {
+      return res.status(404).json({ message: "Booth not found" });
+    }
+    if (booth.status !== "Available") {
+      return res.status(400).json({ message: "Booth is not available" });
+    }
+
+    // Assign exhibitor and update status
+    booth.exhibitor = exhibitorId;
+    booth.status = "Occupied";
+    await booth.save();
+
+    res.status(200).json({ message: "Booth assigned successfully", booth });
+  } catch (error) {
+    console.error("❌ Error assigning booth:", error);
+    res.status(500).json({ message: "Error assigning booth", error: error.message });
+  }
+};
+
+// ✅ Unassign an Exhibitor from a Booth
+const unassignBooth = async (req, res) => {
+  try {
+    const { boothId } = req.body;
+
+    if (!boothId) {
+      return res.status(400).json({ message: "Booth ID is required" });
+    }
+
+    // Find the booth and check if it's occupied
+    const booth = await Booth.findById(boothId);
+    if (!booth) {
+      return res.status(404).json({ message: "Booth not found" });
+    }
+    if (booth.status !== "Occupied") {
+      return res.status(400).json({ message: "Booth is not currently occupied" });
+    }
+
+    // Unassign exhibitor and update status
+    booth.exhibitor = null;
+    booth.status = "Available";
+    await booth.save();
+
+    res.status(200).json({ message: "Booth unassigned successfully", booth });
+  } catch (error) {
+    console.error("❌ Error unassigning booth:", error);
+    res.status(500).json({ message: "Error unassigning booth", error: error.message });
   }
 };
 
@@ -88,6 +154,8 @@ module.exports = {
   createBooth,
   getAllBooths,
   getBoothById,
+  assignBooth,
+  unassignBooth,
   updateBooth,
   deleteBooth
 };
