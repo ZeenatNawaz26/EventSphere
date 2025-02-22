@@ -72,3 +72,5 @@ exports.deleteExpo = async (req, res) => {
     res.status(500).json({ message: "Error deleting expo", error });
   }
 };
+
+

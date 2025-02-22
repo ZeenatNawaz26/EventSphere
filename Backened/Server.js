@@ -2,7 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 require("dotenv").config();
-
+const dashboardRoute = require("./Routes/Dashboardroutes");
 const userRoutes = require("./Routes/Userroutes");
 const boothRoutes = require("./Routes/Boothroute");
 const expoRoutes = require("./Routes/exporoute");
@@ -18,6 +18,7 @@ app.use("/api/booths", boothRoutes);
 app.use("/api/expos", expoRoutes);
 app.use("/api/registrations", registrationRoutes); 
 app.use("/api/schedules", scheduleRoutes);
+app.use("/api/dashboard", dashboardRoute);
 
 mongoose
   .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })

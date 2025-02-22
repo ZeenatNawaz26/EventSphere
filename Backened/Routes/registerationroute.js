@@ -17,4 +17,7 @@ router.get("/user/:userId", getUserRegistrations); // ✅ User Registrations
 router.put("/:registrationId", updateRegistrationStatus); // ✅ Update Status
 router.delete("/:registrationId", deleteRegistration); // ✅ Delete Registration
 
+
+
+
 module.exports = router;

@@ -1,11 +1,12 @@
 const mongoose = require("mongoose");
 
-const boothSchema = new mongoose.Schema({
-    expoId: { type: String, required: true },
-    exhibitor: { type: String, required: true },
-    size: { type: String, required: true },
-    price: { type: Number, required: true }
-  });
-  
+const BoothSchema = new mongoose.Schema({
+  number: { type: String, required: true, unique: true }, // Booth Number
+  location: { type: String, required: true }, // Area in the floor plan
+  status: { type: String, enum: ["Available", "Reserved", "Occupied"], default: "Available" },
+  exhibitor: { type: mongoose.Schema.Types.ObjectId, ref: "Exhibitor", default: null }, // Assigned Exhibitor
+  expo: { type: mongoose.Schema.Types.ObjectId, ref: "Expo", required: true } // Linked Expo Event
+});
 
-module.exports = mongoose.model("Booth", boothSchema);
+const Booth = mongoose.model("Booth", BoothSchema);
+module.exports = Booth;

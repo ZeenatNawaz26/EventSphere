@@ -1,10 +1,13 @@
 const mongoose = require("mongoose");
 
-const expoSchema = new mongoose.Schema({
-    title: String,
-    description: String,
-    date: Date,
-    location: String
+const ExpoSchema = new mongoose.Schema({
+  title: { type: String, required: true },  // ✅ Corrected from name → title
+  description: { type: String },
+  date: { type: Date, required: true },
+  location: { type: String, required: true }
 });
 
-module.exports = mongoose.model("Expo", expoSchema);
+// ✅ Prevent overwriting the model if it already exists
+const Expo = mongoose.models.Expo || mongoose.model("Expo", ExpoSchema);
+
+module.exports = Expo;
