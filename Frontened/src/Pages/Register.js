@@ -5,53 +5,52 @@ import "./style.css";
 
 const Register = () => {
   const [formData, setFormData] = useState({
-    username: "",
+    name: "", // ✅ Changed from username to name
     email: "",
     password: "",
     contactNumber: "",
-    role: "ATTENDEE",
+    role: "attendee", // ✅ Keep lowercase to match backend
   });
 
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  // Handle input changes
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
+
+  // Handle form submission
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
-  
+
     try {
-      const requestData = {
-        Name: formData.username,  // ✅ Map username to Name
-        Email: formData.email,
-        Password: formData.password,
-      };
-  
-      console.log("Sending Request:", requestData); // ✅ Debugging
-      const response = await axios.post("http://localhost:8000/api/users/register", requestData);
-  
+      console.log("Sending Request:", formData); // ✅ Debugging log
+
+      const response = await axios.post("http://localhost:8000/api/users/register", formData);
+
       if (response.data) {
         setSuccess("Signup Successful! Redirecting...");
         setFormData({
-          username: "",
+          name: "",
           email: "",
           password: "",
           contactNumber: "",
-          role: "ATTENDEE",
+          role: "attendee",
         });
+
         setTimeout(() => {
           window.location.href = "/login";
         }, 2000);
       }
     } catch (error) {
-      console.error("Error:", error.response?.data); // ✅ Print error
+      console.error("Error:", error.response?.data); // ✅ Debugging error log
       setError(error.response?.data?.message || "Registration failed");
     }
   };
-  
+
   return (
     <div className="register-container">
       <div className="register-box">
@@ -59,18 +58,20 @@ const Register = () => {
         {error && <p className="error-message">{error}</p>}
         {success && <p className="success-message">{success}</p>}
         <form onSubmit={handleSubmit}>
+          {/* Name Field */}
           <div className="input-container">
             <FaUser />
             <input
               type="text"
-              name="username"
-              placeholder="Enter your username"
-              value={formData.username}
+              name="name" // ✅ Changed from username to name
+              placeholder="Enter your name"
+              value={formData.name}
               onChange={handleChange}
               required
             />
           </div>
 
+          {/* Email Field */}
           <div className="input-container">
             <FaEnvelope />
             <input
@@ -83,6 +84,7 @@ const Register = () => {
             />
           </div>
 
+          {/* Password Field */}
           <div className="input-container">
             <FaLock />
             <input
@@ -95,6 +97,7 @@ const Register = () => {
             />
           </div>
 
+          {/* Contact Number Field */}
           <div className="input-container">
             <FaPhone />
             <input
@@ -107,15 +110,17 @@ const Register = () => {
             />
           </div>
 
+          {/* Role Selection */}
           <div className="input-container">
             <FaUser />
             <select name="role" value={formData.role} onChange={handleChange}>
-              <option value="ATTENDEE">Attendee</option>
-              <option value="EXHIBITOR">Exhibitor</option>
-              <option value="ADMIN">Admin</option>
+              <option value="attendee">Attendee</option>
+              <option value="exhibitor">Exhibitor</option>
+              <option value="admin">Admin</option>
             </select>
           </div>
 
+          {/* Submit Button */}
           <button type="submit" className="register-button">
             Sign Up
           </button>

@@ -1,9 +1,30 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import { FaChartPie, FaUserShield, FaCalendarAlt, FaBriefcase, FaUsers, FaClipboardList, FaFileAlt, FaEnvelope, FaCog, FaCommentDots } from "react-icons/fa";
+import React, { useEffect, useState } from "react";
+import { NavLink } from "react-router-dom";
+import {
+  FaChartPie,
+  FaUserShield,
+  FaCalendarAlt,
+  FaBriefcase,
+  FaUsers,
+  FaClipboardList,
+  FaFileAlt,
+  FaEnvelope,
+  FaCog,
+  FaCommentDots,
+} from "react-icons/fa";
 import "./sidebar.css";
 
-const Sidebar = () => {
+const Sidebar = ({ expoId, role }) => {
+  const validExpoId = expoId || "defaultExpoId";
+  const [userRole, setUserRole] = useState(role || localStorage.getItem("role") || "guest");
+
+  useEffect(() => {
+    const storedRole = localStorage.getItem("role");
+    if (!role && storedRole) {
+      setUserRole(storedRole);
+    }
+  }, [role]);
+
   return (
     <div className="sidebar">
       <div className="sidebar-header">
@@ -11,59 +32,61 @@ const Sidebar = () => {
       </div>
       <ul className="sidebar-menu">
         <li>
-          <Link to="/dashboard">
+          <NavLink to="/dashboard">
             <FaChartPie /> Dashboard
-          </Link>
+          </NavLink>
         </li>
         <li>
-          <Link to="/event-management">
-            <FaCalendarAlt /> Event Management
-          </Link>
+          <NavLink to="/event-management">
+            <FaCalendarAlt /> Expo Management
+          </NavLink>
         </li>
         <li>
-          <Link to="/booth-allocation">
+          <NavLink to="/booth-allocation">
             <FaBriefcase /> Booth Allocation
-          </Link>
+          </NavLink>
         </li>
         <li>
-          <Link to="/exhibitor-management">
+          <NavLink to="/exhibitor-management">
             <FaUsers /> Exhibitor Management
-          </Link>
+          </NavLink>
         </li>
         <li>
-          <Link to="/attendee-management">
+          <NavLink to="/attendee-management">
             <FaClipboardList /> Attendee Management
-          </Link>
+          </NavLink>
         </li>
         <li>
-          <Link to="/schedule-management">
+          <NavLink to="/schedule-management">
             <FaFileAlt /> Schedule Management
-          </Link>
+          </NavLink>
         </li>
         <li>
-          <Link to="/analytics-reporting">
+          <NavLink to={`/analytics-reporting/${validExpoId}`}>
             <FaChartPie /> Analytics & Reporting
-          </Link>
+          </NavLink>
         </li>
         <li>
-          <Link to="/communication-notifications">
+          <NavLink to={`/messages/${validExpoId}`}>
             <FaEnvelope /> Communication & Notifications
-          </Link>
+          </NavLink>
         </li>
+        {userRole === "admin" ? (
+          <li>
+            <NavLink to="/user-management">
+              <FaUserShield /> User Management
+            </NavLink>
+          </li>
+        ) : null}
         <li>
-          <Link to="/user-management">
-            <FaUserShield /> User Management
-          </Link>
-        </li>
-        <li>
-          <Link to="/settings">
+          <NavLink to="/settings">
             <FaCog /> Settings
-          </Link>
+          </NavLink>
         </li>
         <li>
-          <Link to="/feedback-support">
+          <NavLink to="/feedback-support">
             <FaCommentDots /> Feedback & Support
-          </Link>
+          </NavLink>
         </li>
       </ul>
     </div>
