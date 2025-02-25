@@ -1,10 +1,18 @@
 const mongoose = require("mongoose");
 
-const UserSchema = new mongoose.Schema({
-  Name: { type: String, required: true },
-  Email: { type: String, required: true, unique: true },
-  Password: { type: String, required: true } // ✅ This will store hashed password
-});
+const userSchema = new mongoose.Schema(
+  {
+    name: { type: String, required: true },
+    email: { type: String, required: true, unique: true, lowercase: true },
+    password: { type: String, required: true },
+    contactNumber: { type: String, required: true }, // ✅ Added Contact Number
+    role: {
+      type: String,
+      enum: ["admin", "exhibitor", "attendee"],
+      default: "attendee",
+    },
+  },
+  { timestamps: true }
+);
 
-const User = mongoose.model("User", UserSchema);
-module.exports = User;
+module.exports = mongoose.model("User", userSchema);

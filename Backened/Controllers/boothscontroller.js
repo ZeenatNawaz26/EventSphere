@@ -1,3 +1,4 @@
+const mongoose = require("mongoose");
 const Booth = require("../Models/booths_model");
 
 // ✅ Create a new Booth
@@ -5,7 +6,6 @@ const createBooth = async (req, res) => {
   try {
     const { number, location, expo } = req.body;
 
-    // Validation
     if (!number || !location || !expo) {
       return res.status(400).json({ message: "All fields (number, location, expo) are required" });
     }
@@ -18,7 +18,7 @@ const createBooth = async (req, res) => {
 
     const newBooth = new Booth({ number, location, expo });
     await newBooth.save();
-    
+
     res.status(201).json({ message: "Booth created successfully", booth: newBooth });
   } catch (error) {
     console.error("❌ Error creating booth:", error);
@@ -26,7 +26,7 @@ const createBooth = async (req, res) => {
   }
 };
 
-// ✅ Get all Booths with populated Expo & Exhibitor details
+// ✅ Get all Booths
 const getAllBooths = async (req, res) => {
   try {
     const booths = await Booth.find()
@@ -43,7 +43,13 @@ const getAllBooths = async (req, res) => {
 // ✅ Get a single Booth by ID
 const getBoothById = async (req, res) => {
   try {
-    const booth = await Booth.findById(req.params.id)
+    const { id } = req.params;
+
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(400).json({ message: "Invalid Booth ID" });
+    }
+
+    const booth = await Booth.findById(id)
       .populate("expo", "name date location") 
       .populate("exhibitor", "name company email");
 
@@ -67,7 +73,6 @@ const assignBooth = async (req, res) => {
       return res.status(400).json({ message: "Booth ID and Exhibitor ID are required" });
     }
 
-    // Find booth and check if it's available
     const booth = await Booth.findById(boothId);
     if (!booth) {
       return res.status(404).json({ message: "Booth not found" });
@@ -76,7 +81,6 @@ const assignBooth = async (req, res) => {
       return res.status(400).json({ message: "Booth is not available" });
     }
 
-    // Assign exhibitor and update status
     booth.exhibitor = exhibitorId;
     booth.status = "Occupied";
     await booth.save();
@@ -97,7 +101,6 @@ const unassignBooth = async (req, res) => {
       return res.status(400).json({ message: "Booth ID is required" });
     }
 
-    // Find the booth and check if it's occupied
     const booth = await Booth.findById(boothId);
     if (!booth) {
       return res.status(404).json({ message: "Booth not found" });
@@ -106,7 +109,6 @@ const unassignBooth = async (req, res) => {
       return res.status(400).json({ message: "Booth is not currently occupied" });
     }
 
-    // Unassign exhibitor and update status
     booth.exhibitor = null;
     booth.status = "Available";
     await booth.save();
