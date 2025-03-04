@@ -13,6 +13,7 @@ import {
 import Login from "./Pages/Login";
 import Registeration from "./Pages/Register";
 import Sidebar from "./Components/sidebar/sidebar";
+import Sidebar2 from "./Components/sidebar/Sidebar2";
 import Navbar from "./Components/navbar/navbar";
 
 import Header from './Components/navbar/Header';
@@ -25,7 +26,9 @@ import Schedule from "./Pages/Schedule"
 import Speaker from "./Pages/Speaker"
 import Sponsor from "./Pages/Sponsor"
 
+
 import Dashboard from "./Pages/Dashboard";
+ import Dashboard from "./Pages/user_panel/User_Dashboard1";
 import ExpoManagement from "./Pages/ExpoManagement";
 import BoothAllocation from "./Pages/BoothAllocation";
 import ExhibitorManagement from "./Pages/ExhibitorManagement";
@@ -36,6 +39,8 @@ import AnalyticsReporting from "./Pages/AnalyticsReporting";
 import Messages from "./Pages/Messages";
 import UserManagement from "./Pages/UserManagement";
 import ProtectedRoute from "./Components/ProtectedRoute";
+
+import ExpoRegistration from "./Pages/user_panel/ExpoRegistration";
 
 function App() {
   const userId = localStorage.getItem("userId");
@@ -121,6 +126,7 @@ const MainLayout = ({ role }) => {
   return (
     <div className="app-container">
       <Sidebar />
+      <Sidebar2 />
       <div className="content">
         <Navbar />
         <Header />
@@ -135,6 +141,7 @@ const MainLayout = ({ role }) => {
             <Route path='/buy-ticket' element={<BuyTicket />} />
 
             <Route path="/dashboard" element={<Dashboard />} />
+            <Route path="/dashboard1" element={<Dashboard1/>} />
             <Route path="/event-management" element={<ExpoManagement />} />
             <Route path="/expo/create" element={<ExpoForm />} />
             <Route path="/expo/edit/:id" element={<ExpoForm />} />
@@ -144,6 +151,8 @@ const MainLayout = ({ role }) => {
             <Route path="/schedule-management" element={<ScheduleManagement />} />
             <Route path="/analytics-reporting/:expoId" element={<AnalyticsReporting />} />
             <Route path="/messages/:expoId" element={<Messages />} />
+
+            <Route path="/exporegistration" element={<ExpoRegistration />} />
 
             {/* ✅ Role-Based Access Debugging */}
             {role === "admin" ? (
