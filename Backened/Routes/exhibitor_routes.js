@@ -9,7 +9,7 @@ router.post("/register", registerExhibitor);
 // ✅ GET: Fetch All Exhibitors
 router.get("/", getAllExhibitors);
 
-// ✅ PUT: Update Exhibitor (Fix: Function Defined Properly)
+// ✅ PUT: Update Exhibitor
 router.put("/:id", updateExhibitor);
 
 module.exports = router;

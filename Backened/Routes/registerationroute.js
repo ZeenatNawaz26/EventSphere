@@ -19,5 +19,4 @@ router.delete("/:registrationId", deleteRegistration); // ✅ Delete Registratio
 
 
 
-
 module.exports = router;

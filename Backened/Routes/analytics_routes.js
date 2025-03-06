@@ -1,14 +1,11 @@
 const express = require("express");
+const { getAttendeeEngagement, getBoothTraffic, getSessionPopularity, getRealTimeAnalytics } = require("../Controllers/analytics_controller");
+
 const router = express.Router();
-const analyticsController = require("../Controllers/analytics_controller")
 
-// 📌 Get analytics for an expo
-router.get("/:expoId", analyticsController.getAnalytics);
-
-// 📌 Get real-time analytics
-router.get("/realtime/:expoId", analyticsController.getRealTimeAnalytics);
-
-// 📌 Add analytics data
-router.post("/add", analyticsController.addAnalytics);
+router.get("/attendee-engagement", getAttendeeEngagement);
+router.get("/booth-traffic", getBoothTraffic);
+router.get("/session-popularity", getSessionPopularity);
+router.get("/real-time-analytics", getRealTimeAnalytics);
 
 module.exports = router;

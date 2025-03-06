@@ -1,15 +1,11 @@
 const express = require("express");
-const { registerAttendee, getAllAttendees, checkInAttendee } = require("../Controllers/attendee_controller");
-
 const router = express.Router();
+const { registerAttendee, getAllAttendees, setCheckedIn, setCheckedOut } = require("../Controllers/attendee_controller");
 
-// ✅ POST: Register a new attendee
+// Routes
 router.post("/register", registerAttendee);
-
-// ✅ GET: Fetch all attendees
 router.get("/", getAllAttendees);
-
-// ✅ PUT: Check-in attendee
-router.put("/checkin/:id", checkInAttendee);
+router.put("/:id/checkin", setCheckedIn); // Set attendee as checked-in
+router.put("/:id/checkout", setCheckedOut); // Set attendee as checked-out
 
 module.exports = router;

@@ -1,59 +1,120 @@
-const Analytics = require("../Models/analytics_model")
+const Attendee = require("../Models/attendee_model");
+const Booth = require("../Models/booths_model");
+const Session = require("../Models/session_model");
 
-const mongoose = require("mongoose");
+// 📊 Attendee Engagement
+const getAttendeeEngagement = async (req, res) => {
+    try {
+        console.log("🔄 Fetching Attendee Engagement...");
+        const engagementData = await Attendee.aggregate([
+            { $group: { _id: "$event", totalAttendees: { $sum: 1 } } } // eventId corrected to event
+        ]);
+        console.log("✅ Attendee Engagement Data:", engagementData);
+        res.json(engagementData);
+    } catch (error) {
+        console.error("❌ Error fetching attendee engagement:", error);
+        res.status(500).json({ message: "Error fetching attendee engagement", error });
+    }
+};
 
-
-exports.getAnalytics = async (req, res) => {
-  const { expoId } = req.params;
-
-  // 🛑 Validate expoId before querying MongoDB
-  if (!mongoose.Types.ObjectId.isValid(expoId)) {
-    return res.status(400).json({ error: "Invalid Expo ID format" });
-  }
-
+// 🚪 Booth Traffic
+// const getBoothTraffic = async (req, res) => {
+//     try {
+//         console.log("🔄 Fetching Booth Traffic...");
+//         const trafficData = await Booth.aggregate([
+//             { $group: { _id: "$_id", totalVisitors: { $sum: "$visitorCount" } } } // boothId corrected
+//         ]);
+//         console.log("✅ Booth Traffic Data:", trafficData);
+//         res.json(trafficData);
+//     } catch (error) {
+//         console.error("❌ Error fetching booth traffic:", error);
+//         res.status(500).json({ message: "Error fetching booth traffic", error });
+//     }
+// };
+// 🚪 Booth Traffic
+const getBoothTraffic = async (req, res) => {
   try {
-    const analyticsData = await Analytics.find({ expoId });
-    res.json(analyticsData);
+      console.log("🔄 Fetching Booth Traffic...");
+      const trafficData = await Booth.aggregate([
+          { $group: { _id: "$_id", totalVisitors: { $sum: { $ifNull: ["$visitorCount", 0] } } } }
+      ]);
+      console.log("✅ Booth Traffic Data:", trafficData);
+      res.json(trafficData);
   } catch (error) {
-    console.error("Server error fetching analytics:", error);
-    res.status(500).json({ error: "Internal Server Error" });
+      console.error("❌ Error fetching booth traffic:", error);
+      res.status(500).json({ message: "Error fetching booth traffic", error });
+  }
+};
+
+// 🎤 Session Popularity
+const getSessionPopularity = async (req, res) => {
+  try {
+      console.log("🔄 Fetching Session Popularity...");
+      const sessionData = await Session.aggregate([
+          { $group: { _id: "$_id", totalAttendees: { $sum: { $ifNull: ["$attendeeCount", 0] } } } }
+      ]);
+      console.log("✅ Session Popularity Data:", sessionData);
+      res.json(sessionData);
+  } catch (error) {
+      console.error("❌ Error fetching session popularity:", error);
+      res.status(500).json({ message: "Error fetching session popularity", error });
+  }
+};
+
+// 🎤 Session Popularity
+// const getSessionPopularity = async (req, res) => {
+//     try {
+//         console.log("🔄 Fetching Session Popularity...");
+//         const sessionData = await Session.aggregate([
+//             { $group: { _id: "$_id", totalAttendees: { $sum: "$attendeeCount" } } } // sessionId corrected
+//         ]);
+//         console.log("✅ Session Popularity Data:", sessionData);
+//         res.json(sessionData);
+//     } catch (error) {
+//         console.error("❌ Error fetching session popularity:", error);
+//         res.status(500).json({ message: "Error fetching session popularity", error });
+//     }
+// };
+
+// 📡 Real-time Analytics
+// const getRealTimeAnalytics = async (req, res) => {
+//     try {
+//         console.log("🔄 Fetching Real-Time Analytics...");
+//         const liveData = {
+//             liveAttendees: await Attendee.countDocuments(),
+//             liveBoothVisitors: await Booth.countDocuments({ visitorCount: { $gt: 0 } })
+//         };
+//         console.log("✅ Real-Time Analytics Data:", liveData);
+//         res.json(liveData);
+//     } catch (error) {
+//         console.error("❌ Error fetching real-time analytics:", error);
+//         res.status(500).json({ message: "Error fetching real-time analytics", error });
+//     }
+// };
+
+// 📡 Real-time Analytics
+const getRealTimeAnalytics = async (req, res) => {
+  try {
+      console.log("🔄 Fetching Real-Time Analytics...");
+
+      const liveAttendees = await Attendee.countDocuments({});
+      const liveBoothVisitors = await Booth.aggregate([
+          { $match: { visitorCount: { $gt: 0 } } },
+          { $group: { _id: null, totalVisitors: { $sum: "$visitorCount" } } }
+      ]);
+
+      console.log("✅ Real-Time Data:", { liveAttendees, liveBoothVisitors });
+
+      res.json({
+          liveAttendees,
+          liveBoothVisitors: liveBoothVisitors.length > 0 ? liveBoothVisitors[0].totalVisitors : 0
+      });
+
+  } catch (error) {
+      console.error("❌ Error fetching real-time analytics:", error);
+      res.status(500).json({ message: "Error fetching real-time analytics", error });
   }
 };
 
 
-// 📌 Get real-time analytics
-exports.getRealTimeAnalytics = async (req, res) => {
-    try {
-        const { expoId } = req.params;
-
-        // ✅ Validate expoId before querying MongoDB
-        if (!expoId || !expoId.match(/^[0-9a-fA-F]{24}$/)) {
-            return res.status(400).json({ error: "Invalid expoId format" });
-        }
-
-        const analytics = await Analytics.find({ expoId });
-        res.json(analytics);
-    } catch (error) {
-        console.error("❌ Error fetching real-time analytics:", error);
-        res.status(500).json({ error: "Server error" });
-    }
-};
-
-// 📌 Add new analytics data
-exports.addAnalytics = async (req, res) => {
-    try {
-        const { expoId, type, data } = req.body;
-
-        if (!expoId || !type || !data) {
-            return res.status(400).json({ message: "All fields are required" });
-        }
-
-        const newAnalytics = new Analytics({ expoId, type, data });
-        await newAnalytics.save();
-
-        res.status(201).json({ message: "Analytics data added", newAnalytics });
-    } catch (error) {
-        console.error("❌ Error adding analytics:", error);
-        res.status(500).json({ message: "Internal Server Error" });
-    }
-};
+module.exports = { getAttendeeEngagement, getBoothTraffic, getSessionPopularity, getRealTimeAnalytics };
