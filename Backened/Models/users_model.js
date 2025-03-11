@@ -11,7 +11,11 @@ const userSchema = new mongoose.Schema(
       enum: ["admin", "exhibitor", "attendee"],
       default: "attendee",
     },
+     // 🔹 Reset Password Fields
+  resetToken: { type: String },
+  resetTokenExpires: { type: Date }
   },
+ 
   { timestamps: true }
 );
 

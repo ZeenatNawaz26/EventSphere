@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import "../App.css";
 import {
   Button,
   Container,
@@ -17,6 +18,7 @@ import {
   CircularProgress,
   Snackbar,
   Paper,
+  Box,
 } from "@mui/material";
 import { Alert, IconButton } from "@mui/material";
 import { Add, Edit, Delete } from "@mui/icons-material";
@@ -99,86 +101,88 @@ const ExpoManagement = () => {
   };
 
   return (
-    <Container>
-      <Typography variant="h4" gutterBottom>
-        Expo Management
-      </Typography>
+    <Box className="expo-container">
+      <Container>
+        <Typography variant="h4" gutterBottom>
+          Expo Management
+        </Typography>
 
-      <Button
-        variant="contained"
-        color="primary"
-        startIcon={<Add />}
-        onClick={() => handleOpen()}
-        sx={{ mb: 2 }}
-      >
-        Add Expo
-      </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          startIcon={<Add />}
+          onClick={() => handleOpen()}
+          sx={{ mb: 2 }}
+        >
+          Add Expo
+        </Button>
 
-      {loading ? (
-        <CircularProgress />
-      ) : (
-        <Paper elevation={3} sx={{ overflow: "hidden" }}>
-          <Table>
-            <TableHead>
-              <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
-                <TableCell><strong>Title</strong></TableCell>
-                <TableCell><strong>Description</strong></TableCell>
-                <TableCell><strong>Date</strong></TableCell>
-                <TableCell><strong>Location</strong></TableCell>
-                <TableCell><strong>Actions</strong></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {expos.length > 0 ? (
-                expos.map((expo) => (
-                  <TableRow key={expo._id} hover>
-                    <TableCell>{expo.title}</TableCell>
-                    <TableCell>{expo.description}</TableCell>
-                    <TableCell>{new Date(expo.date).toLocaleDateString()}</TableCell>
-                    <TableCell>{expo.location}</TableCell>
-                    <TableCell>
-                      <IconButton color="primary" onClick={() => handleOpen({ ...expo, id: expo._id })}>
-                        <Edit />
-                      </IconButton>
-                      <IconButton color="error" onClick={() => handleDelete(expo._id)}>
-                        <Delete />
-                      </IconButton>
+        {loading ? (
+          <CircularProgress />
+        ) : (
+          <Paper elevation={3} className="expo-table">
+            <Table>
+              <TableHead>
+                <TableRow sx={{ backgroundColor: "#f5f5f5" }}>
+                  <TableCell><strong>Title</strong></TableCell>
+                  <TableCell><strong>Description</strong></TableCell>
+                  <TableCell><strong>Date</strong></TableCell>
+                  <TableCell><strong>Location</strong></TableCell>
+                  <TableCell><strong>Actions</strong></TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {expos.length > 0 ? (
+                  expos.map((expo) => (
+                    <TableRow key={expo._id} hover>
+                      <TableCell>{expo.title}</TableCell>
+                      <TableCell>{expo.description}</TableCell>
+                      <TableCell>{new Date(expo.date).toLocaleDateString()}</TableCell>
+                      <TableCell>{expo.location}</TableCell>
+                      <TableCell>
+                        <IconButton color="primary" onClick={() => handleOpen({ ...expo, id: expo._id })}>
+                          <Edit />
+                        </IconButton>
+                        <IconButton color="error" onClick={() => handleDelete(expo._id)}>
+                          <Delete />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={5} align="center">
+                      No expos found.
                     </TableCell>
                   </TableRow>
-                ))
-              ) : (
-                <TableRow>
-                  <TableCell colSpan={5} align="center">
-                    No expos found.
-                  </TableCell>
-                </TableRow>
-              )}
-            </TableBody>
-          </Table>
-        </Paper>
-      )}
+                )}
+              </TableBody>
+            </Table>
+          </Paper>
+        )}
 
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{currentExpo.id ? "Edit Expo" : "Add Expo"}</DialogTitle>
-        <DialogContent>
-          {error && <Alert severity="error">{error}</Alert>}
-          <TextField margin="dense" label="Title" name="title" value={currentExpo.title} onChange={handleChange} fullWidth required />
-          <TextField margin="dense" label="Description" name="description" value={currentExpo.description} onChange={handleChange} fullWidth multiline rows={3} required />
-          <TextField margin="dense" label="Date" type="date" name="date" value={currentExpo.date} onChange={handleChange} fullWidth InputLabelProps={{ shrink: true }} required />
-          <TextField margin="dense" label="Location" name="location" value={currentExpo.location} onChange={handleChange} fullWidth required />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose} color="secondary">Cancel</Button>
-          <Button onClick={handleSave} color="primary" variant="contained">Save</Button>
-        </DialogActions>
-      </Dialog>
+        <Dialog open={open} onClose={handleClose}>
+          <DialogTitle>{currentExpo.id ? "Edit Expo" : "Add Expo"}</DialogTitle>
+          <DialogContent>
+            {error && <Alert severity="error">{error}</Alert>}
+            <TextField margin="dense" label="Title" name="title" value={currentExpo.title} onChange={handleChange} fullWidth required />
+            <TextField margin="dense" label="Description" name="description" value={currentExpo.description} onChange={handleChange} fullWidth multiline rows={3} required />
+            <TextField margin="dense" label="Date" type="date" name="date" value={currentExpo.date} onChange={handleChange} fullWidth InputLabelProps={{ shrink: true }} required />
+            <TextField margin="dense" label="Location" name="location" value={currentExpo.location} onChange={handleChange} fullWidth required />
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose} color="secondary">Cancel</Button>
+            <Button onClick={handleSave} color="primary" variant="contained">Save</Button>
+          </DialogActions>
+        </Dialog>
 
-      <Snackbar open={!!successMessage} autoHideDuration={3000} onClose={() => setSuccessMessage("")} anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
-        <Alert onClose={() => setSuccessMessage("")} severity="success">
-          {successMessage}
-        </Alert>
-      </Snackbar>
-    </Container>
+        <Snackbar open={!!successMessage} autoHideDuration={3000} onClose={() => setSuccessMessage("")} anchorOrigin={{ vertical: "bottom", horizontal: "center" }}>
+          <Alert onClose={() => setSuccessMessage("")} severity="success">
+            {successMessage}
+          </Alert>
+        </Snackbar>
+      </Container>
+    </Box>
   );
 };
 

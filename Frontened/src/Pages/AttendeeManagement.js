@@ -1,23 +1,44 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Container, Typography, Button, Modal, Box, TextField, MenuItem, Select, FormControl, InputLabel, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import {
+  Container,
+  Typography,
+  Button,
+  Modal,
+  Box,
+  TextField,
+  MenuItem,
+  Select,
+  FormControl,
+  InputLabel,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Tooltip,
+} from "@mui/material";
+import CheckIcon from "@mui/icons-material/Check";
+import CloseIcon from "@mui/icons-material/Close";
+import { IconButton } from "@mui/material";
+import "../App.css";
 
 const AttendeeManagement = () => {
   const [attendees, setAttendees] = useState([]);
-  const [events, setEvents] = useState([]); // Store events
+  const [events, setEvents] = useState([]);
   const [open, setOpen] = useState(false);
   const [formData, setFormData] = useState({
     name: "",
     email: "",
     phone: "",
     eventId: "",
-    checkedIn: false
   });
 
-  // Fetch attendees & events from backend
   useEffect(() => {
     fetchAttendees();
-    fetchEvents(); // Fetch events for dropdown
+    fetchEvents();
   }, []);
 
   const fetchAttendees = async () => {
@@ -44,41 +65,72 @@ const AttendeeManagement = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     try {
       await axios.post("http://localhost:8000/api/attendees/register", formData);
       fetchAttendees();
       setOpen(false);
-      setFormData({ name: "", email: "", phone: "", eventId: "", checkedIn: false });
+      setFormData({ name: "", email: "", phone: "", eventId: "" });
     } catch (error) {
       console.error("❌ Error adding attendee:", error.response?.data || error.message);
     }
   };
 
+  const handleCheckIn = async (attendeeId) => {
+    if (!window.confirm("Check in this attendee?")) return;
+
+    try {
+      await axios.put(`http://localhost:8000/api/attendees/${attendeeId}/checkin`, { checkedIn: true });
+      fetchAttendees();
+      alert("Attendee checked in successfully!");
+    } catch (error) {
+      console.error("❌ Error checking in:", error);
+      alert("Failed to check in attendee.");
+    }
+  };
+
+  const handleCheckOut = async (attendeeId) => {
+    if (!window.confirm("Check out this attendee?")) return;
+
+    try {
+      await axios.put(`http://localhost:8000/api/attendees/${attendeeId}/checkin`, { checkedIn: false });
+      fetchAttendees();
+      alert("Attendee checked out successfully!");
+    } catch (error) {
+      console.error("❌ Error checking out:", error);
+      alert("Failed to check out attendee.");
+    }
+  };
+
   return (
-    <Container>
-      <Typography variant="h4" align="center" sx={{ mt: 3 }}>
+    <Container className="attendee-container">
+      <Typography variant="h4"  sx={{ mt: 3 }}>
         Attendee Management
       </Typography>
-
-      <Button variant="contained" color="primary" sx={{ mt: 2, mb: 2 }} onClick={() => setOpen(true)}>
-        Add Attendee
+<br/>
+      <Button className="add-attendee-btn" onClick={() => setOpen(true)}>
+        + Add Attendee
       </Button>
 
+      {/* Modal for Adding Attendee */}
       <Modal open={open} onClose={() => setOpen(false)}>
-        <Box sx={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", width: 400, bgcolor: "background.paper", boxShadow: 24, p: 4, borderRadius: 2 }}>
+        <Box className="attendee-modal">
           <Typography variant="h6" gutterBottom>Add New Attendee</Typography>
           <form onSubmit={handleSubmit}>
             <TextField fullWidth label="Name" name="name" value={formData.name} onChange={handleChange} margin="normal" required />
             <TextField fullWidth label="Email" name="email" value={formData.email} onChange={handleChange} margin="normal" required />
             <TextField fullWidth label="Phone" name="phone" value={formData.phone} onChange={handleChange} margin="normal" required />
-            
-            {/* Event Dropdown */}
+
             <FormControl fullWidth margin="normal">
               <InputLabel>Select Event</InputLabel>
               <Select name="eventId" value={formData.eventId} onChange={handleChange} required>
-                {events.map((event) => (
-                  <MenuItem key={event._id} value={event._id}>{event.name}</MenuItem>
-                ))}
+                {events.length > 0 ? (
+                  events.map((event) => (
+                    <MenuItem key={event._id} value={event._id}>{event.name}</MenuItem>
+                  ))
+                ) : (
+                  <MenuItem disabled>No events available</MenuItem>
+                )}
               </Select>
             </FormControl>
 
@@ -88,7 +140,7 @@ const AttendeeManagement = () => {
       </Modal>
 
       {/* Attendee List */}
-      <TableContainer component={Paper} sx={{ mt: 2 }}>
+      <TableContainer component={Paper} className="attendee-table">
         <Table>
           <TableHead>
             <TableRow>
@@ -96,7 +148,7 @@ const AttendeeManagement = () => {
               <TableCell><b>Email</b></TableCell>
               <TableCell><b>Phone</b></TableCell>
               <TableCell><b>Event</b></TableCell>
-              <TableCell><b>Checked In</b></TableCell>
+              <TableCell align="center"><b>Actions</b></TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -106,8 +158,19 @@ const AttendeeManagement = () => {
                   <TableCell>{attendee.name}</TableCell>
                   <TableCell>{attendee.email}</TableCell>
                   <TableCell>{attendee.phone}</TableCell>
-                  <TableCell>{events.find(event => event._id === attendee.eventId)?.name || "Unknown Event"}</TableCell>
-                  <TableCell>{attendee.checkedIn ? "✅ Yes" : "❌ No"}</TableCell>
+                  <TableCell>{attendee.event?.name || "No Event"}</TableCell>
+                  <TableCell align="center">
+                    <Tooltip title="Check In">
+                      <IconButton onClick={() => handleCheckIn(attendee._id)} className="checkin-btn">
+                        <CheckIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Check Out">
+                      <IconButton onClick={() => handleCheckOut(attendee._id)} className="checkout-btn">
+                        <CloseIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </TableCell>
                 </TableRow>
               ))
             ) : (

@@ -1,0 +1,128 @@
+/* General Reset - Only affecting login/signup */
+.auth-page * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+  }
+  
+  /* Only applies when the page has the .auth-page class */
+  .auth-page {
+    background: black;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+  
+  /* Login & Register Container - Only for login/signup */
+  .auth-page .login-container,
+  .auth-page .register-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: #222;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+    text-align: center;
+    width: 350px;
+  }
+  
+  .auth-page h1 {
+    color: white;
+    margin-bottom: 1.5rem;
+    font-size: 1.8rem;
+  }
+  
+  /* Input Fields */
+  .auth-page .input-container {
+    display: flex;
+    align-items: center;
+    background: #333;
+    border-radius: 8px;
+    padding: 10px;
+    margin-bottom: 15px;
+  }
+  
+  .auth-page .input-container select {
+    appearance: none;
+    background-color: black;
+    color: white;
+    border-radius: 5px;
+    padding: 8px;
+  }
+  
+  .auth-page .input-container select option {
+    background-color: rgb(69, 68, 68);
+    color: white;
+  }
+  
+  .auth-page .input-container input,
+  .auth-page .input-container select {
+    width: 100%;
+    border: none;
+    background: transparent;
+    outline: none;
+    padding-left: 10px;
+    font-size: 1rem;
+    color: white;
+  }
+  
+  .auth-page .input-container svg {
+    color: white;
+    font-size: 1.2rem;
+  }
+  
+  /* Buttons */
+  .auth-page button {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+  }
+  
+  .auth-page .login-button {
+    background: #444;
+    color: white;
+  }
+  
+  .auth-page .register-button {
+    background: #555;
+    color: white;
+  }
+  
+  .auth-page button:hover {
+    opacity: 0.8;
+  }
+  
+  /* Signup Link */
+  .auth-page .signup-link {
+    margin-top: 15px;
+    color: white;
+  }
+  
+  .auth-page .signup-link a {
+    color: #bbb;
+    font-weight: bold;
+    text-decoration: none;
+  }
+  
+  .auth-page .signup-link a:hover {
+    text-decoration: underline;
+    color: white;
+  }
+  
+  /* Responsive Design */
+  @media (max-width: 400px) {
+    .auth-page .login-container,
+    .auth-page .register-container {
+      width: 90%;
+    }
+  }
+  

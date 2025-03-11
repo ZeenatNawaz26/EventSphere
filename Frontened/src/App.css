@@ -1,55 +1,696 @@
-.dashboard {
-  padding-top: 80px; /* Ensure content starts below navbar */
-  min-height: 100vh;
-  background: linear-gradient(90deg, #4B79A1, #283E51);
-  width: 100vw; /* Full viewport width */
-  overflow-x: hidden; /* Hide extra horizontal scroll */
-}
+  /* Ensure the dashboard content has proper alignment */
+  body {
+    overflow-x: hidden;
+    overflow-y: auto;
+    background-color: #f9f9f9;
+    min-height: 100vh;
+  }
 
-/* Fix Container to Fit Full Width */
-.dashboard-container {
-  display: flex;
-  width: 100%;
-}
+  .dashboard-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 100%;
+    padding-top: 20px; /* Adjust spacing */
+    min-height: 100vh;
+    background-color: #f9f9f9;
+  }
 
+  /* Title Styling - Fix Visibility */
+  .dashboard-title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: white;
+    text-align: center;
+    margin-top: 40px; /* Adjust space above */
+    text-shadow: 2px 2px 8px rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 10; /* Ensure it's above the background */
+    margin-left: 90px; 
+  }
 
-/* Cards Section */
-.dashboard-cards {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-  justify-content: center; /* Center align */
-  width: 100%;
-  margin-top: 290px;
-}
+  /* Cards Section */
+  .dashboard-cards {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    justify-content: center;
+    width: 100%;
+    max-width: 1200px;
+    margin-top: 50px;
+    margin-left: 80px; 
+  }
 
-.card {
-  width: 250px; /* Increase width */
-  padding: 20px;
-  text-align: center;
-  background: white;
-  border-radius: 10px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
-  color: black;
-  font-weight: bold;
-  /* margin-left: 10px; */
-}
+  .card {
+    width: 260px; /* Slightly bigger */
+    padding: 20px;
+    text-align: center;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+    color: #333;
+    font-weight: bold;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+  }
 
-/* Charts Section */
-.chart-container {
-  background: white;
-  padding: 20px;
-  margin-top: 30px;
-  margin-left: 370px;
-  border-radius: 10px;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-  color: black;
-  width: 100%;
-  max-width: 1080px;
-  
-}
-.main-content {
-    margin-left: 250px; /* Same as sidebar width */
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  }
+
+  /* Charts Section */
+  .chart-container {
+    background: white;
+    padding: 25px;
+    margin-top: 50px;
+    border-radius: 12px;
+    box-shadow: 0px 6px 12px rgba(0, 0, 0, 0.15);
+    color: black;
+    width: 100%;
+    max-width: 1100px;
+  }
+
+  /* Sidebar Adjustment */
+  .main-content {
+    margin-left: 250px; /* Sidebar ka space */
     width: calc(100% - 250px);
     padding: 20px;
+    overflow: auto; /* Scroll issue solve karega */
+  }
+
+  /* Responsive Fixes */
+  @media (max-width: 768px) {
+    .dashboard-title {
+      font-size: 2rem;
+      margin-top: 20px;
+    }
+    
+    .main-content {
+      margin-left: 0;
+      width: 100%;
+      padding: 15px;
+    }
+
+    .dashboard-cards {
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .card {
+      width: 90%;
+    }
+  }
+  .expo-container {
+    margin-left: 260px; /* Sidebar width adjust karein */
+    padding: 20px;
+    width: calc(100% - 260px);
+    min-height: 100vh;
+    background-color: #f9f9f9;
+    margin-top: 70px;
+    
+  }
+
+  .expo-table {
+    overflow-x: auto;
+    
+  }
+
+  /* BoothAllocation.css */
+
+  /* Container Styling */
+  .container {
+    padding: 20px;
+    margin-top: 100px; 
+    background-color: #f9f9f9;
+    min-height: 100vh;
+    
+  }
+
+  /* Typography */
+  h4 {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  /* Table Styling */
+  .MuiTable-root {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+  }
+
+  .MuiTableHead-root {
+    background-color: #f5f5f5;
+  }
+
+  .MuiTableRow-root:hover {
+    background-color: #f9f9f9;
+  }
+
+  .MuiTableCell-root {
+    padding: 12px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+  }
+
+  .MuiTableCell-root strong {
+    color: #555;
+  }
+
+  /* Buttons */
+  .MuiButton-root {
+    text-transform: none;
+    font-weight: 600;
+  }
+
+  .add-button {
+    margin-bottom: 16px;
+    background-color: #1976d2;
+    color: #fff;
+  }
+
+  .add-button:hover {
+    background-color: #115293;
+  }
+
+  /* Icon Buttons */
+  .MuiIconButton-root {
+    transition: transform 0.2s;
+  }
+
+  .MuiIconButton-root:hover {
+    transform: scale(1.1);
+  }
+
+  /* Dialog Styling */
+  .MuiDialogTitle-root {
+    font-size: 20px;
+    font-weight: bold;
+  }
+
+  .MuiDialogContent-root {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  /* Select and TextField */
+  .MuiTextField-root,
+  .MuiSelect-root {
+    margin-top: 8px;
+  }
+
+  /* Snackbar */
+  .MuiSnackbar-root {
+    bottom: 20px;
+  }
+
+  /* Container Styling */
+
+
+  /* Booth Title */
+  .booth-title {
+    font-size: 24px;
+    margin-top: 200px;
+    font-weight: bold;
+    margin-bottom: 20px;
+    color: #333;
+  }
+
+  /* Table Styling */
+  .booth-table {
+    width: 100%;
+    max-width: 1100px;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    overflow-x: auto;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .booth-table th,
+  .booth-table td {
+    padding: 12px;
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .booth-table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+  }
+
+  /* Booth Status Colors */
+  .status-available {
+    background: #e0f7fa;
+    color: #00796b;
+    font-weight: bold;
+    padding: 6px;
+    border-radius: 5px;
+  }
+
+  .status-reserved {
+    background: #ffebee;
+    color: #d32f2f;
+    font-weight: bold;
+    padding: 6px;
+    border-radius: 5px;
+  }
+
+  .status-allocated {
+    background: #e8f5e9;
+    color: #388e3c;
+    font-weight: bold;
+    padding: 6px;
+    border-radius: 5px;
+  }
+
+  /* Button Styles */
+  .booth-btn {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.3s ease;
+  }
+
+  .booth-btn.edit {
+    background-color: #1976d2;
+    color: white;
+  }
+
+  .booth-btn.edit:hover {
+    background-color: #1565c0;
+  }
+
+  .booth-btn.delete {
+    background-color: #d32f2f;
+    color: white;
+  }
+
+  .booth-btn.delete:hover {
+    background-color: #b71c1c;
+  }
+
+  /* Dialog Styling */
+  .dialog-container {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+
+  .dialog-container input,
+  .dialog-container select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 768px) {
+    .booth-table {
+      display: block;
+      overflow-x: auto;
+      white-space: nowrap;
+    }
+  }
+  .exhibitor-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    width: 100%;
+    margin-top: 80px;
+    margin-left: 80px;
 }
+
+/* ✅ Main Wrapper to Center Everything */
+.exhibitor-wrapper {
+    width: 90%;
+    max-width: 1200px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* ✅ Card Styling */
+.exhibitor-card {
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    border-radius: 10px;
+    background: white;
+    padding: 15px;
+    width: 100%;
+}
+
+/* ✅ Table Styling */
+.exhibitor-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: white;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.exhibitor-table th,
+.exhibitor-table td {
+    padding: 10px; /* ✅ تھوڑا کم کیا */
+    text-align: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.exhibitor-table th {
+    background-color: #f5f5f5;
+    font-weight: bold;
+}
+
+/* ✅ Buttons (Chota Kar Diya) */
+.exhibitor-btn {
+    padding: 6px 10px; /* ✅ پہلے 8px 12px تھا، اب کم کیا */
+    font-size: 13px; /* ✅ تھوڑا چھوٹا کیا */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: 0.3s ease;
+    min-width: 90px; /* ✅ Minimum width set */
+}
+
+.exhibitor-btn.add {
+  background-color: #1976d2;
+  color: white;
+  padding: 6px 12px;  /* 🔹 Padding کم کی */
+  font-size: 14px;     /* 🔹 Font تھوڑا چھوٹا */
+  border-radius: 5px;
+  min-width: auto;    /* 🔹 Width auto کر دی */
+  display: inline-block;
+  text-align: center;
+}
+
+.exhibitor-btn.add:hover {
+  background-color: #1565c0;
+}
+
+
+/* ✅ Dialog Styling */
+.dialog-container {
+    padding: 15px; /* ✅ کم کیا */
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* ✅ تھوڑا کم space */
+}
+
+.dialog-container input,
+.dialog-container select {
+    width: 100%;
+    padding: 8px; /* ✅ کم کیا */
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+/* ✅ Responsive Design */
+@media (max-width: 768px) {
+    .exhibitor-wrapper {
+        width: 100%;
+        padding: 10px;
+    }
+
+    .exhibitor-table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+    }
+
+    /* ✅ Mobile Button Size */
+    .exhibitor-btn {
+        padding: 5px 8px;
+        font-size: 12px;
+    }
+}
+/* .attendee-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  width: 100%;
+  margin-top: 80px;
+  margin-left: 80px;
+} */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  margin-top: 80px;
+ 
+}
+
+.add-attendee-btn {
+  background-color: #1976d2 !important;
+  color: white !important;
+  padding: 6px 14px !important;
+  font-size: 14px !important;
+  border-radius: 6px !important;
+}
+
+.attendee-modal {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90%;
+  max-width: 400px;
+  background: white;
+  box-shadow: 24px;
+  padding: 20px;
+  border-radius: 8px;
+}
+
+.attendee-table {
+  margin-top: 10px;
+}
+
+.checkin-btn {
+  color: green !important;
+}
+
+.checkout-btn {
+  color: red !important;
+}
+.schedule-container {
+  max-width: 90%;
+  margin: auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.table-container {
+  max-height: 300px;
+  overflow-y: auto;
+  margin-top: 10px;
+}
+
+.modal-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 350px;
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+.message-form-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+  width: 100%;
+  margin-top: 80px;
+}
+
+.message-form {
+  width: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.message-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  width: 100%;
+}
+
+.message-form {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.message-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  width: 100%;
+}
+
+.message-form {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Message List Container */
+.message-list {
+  background: #ffffff;
+  padding: 15px;
+  border-radius: 8px;
+  box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+  max-width: 800px;
+  margin: 20px auto;
+  overflow-y: auto;
+  max-height: 400px;
+}
+
+/* Individual Message Item */
+.message-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #f8f9fa;
+  padding: 12px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  border-left: 5px solid #007bff;
+  transition: background 0.3s ease-in-out;
+}
+
+/* Message Hover Effect */
+.message-item:hover {
+  background: #e9ecef;
+}
+
+/* Sender Name */
+.sender-name {
+  font-weight: bold;
+  color: #333;
+}
+
+/* Message Content */
+.message-content {
+  flex: 1;
+  margin-left: 10px;
+  color: #555;
+  font-size: 14px;
+  text-align: left;
+}
+
+/* Timestamp */
+.message-time {
+  font-size: 12px;
+  color: #888;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .message-list {
+      max-width: 100%;
+      padding: 10px;
+      margin-left: 90px;
+  }
+
+  .message-item {
+      flex-direction: column;
+      align-items: flex-start;
+      padding: 10px;
+  }
+
+  .message-time {
+      margin-top: 5px;
+  }
+}
+
+/* Messages Page Container */
+.message-container {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 20px;
+  background: #fff;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
+}
+
+.message-content {
+  display: flex;
+  align-items: flex-start;
+  gap: 20px;
+}
+
+.message-form {
+  flex: 1;
+  background: #f9f9f9;
+  padding: 15px;
+  border-radius: 8px;
+}
+
+.message-list-container {
+  flex: 2;
+  background: #f1f1f1;
+  padding: 15px;
+  border-radius: 8px;
+  width: 100%;
+}
+
+.message-list {
+  max-height: 500px;
+  overflow-y: auto;
+  width: 100%;
+  margin-left:200px ;
+}
+
+/* Individual Message */
+.message-item {
+  border-bottom: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.message-item:last-child {
+  border-bottom: none;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .messages-container {
+      padding: 10px;
+  }
+
+  .message-form input,
+  .message-form textarea {
+      font-size: 14px;
+  }
+
+  .send-button {
+      width: 100%;
+  }
+}
+

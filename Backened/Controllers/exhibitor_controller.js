@@ -4,63 +4,70 @@ const Booth = require("../Models/booths_model");
 const Expo = require("../Models/expos_model");
 
 // ✅ Register a New Exhibitor
-const registerExhibitor = async (req, res) => {
+const findAvailableBooth = async (boothPreference, expoId) => {
+    console.log(`🔍 Searching for booth with type: ${boothPreference} in Expo ID: ${expoId}`);
+
     try {
-        console.log("Received Exhibitor Data:", req.body);
-        const { companyName, contactPerson, email, phone, expoId, boothPreference } = req.body;
-
-        // Validate required fields
-        if (!companyName || !contactPerson || !email || !phone || !expoId || !boothPreference) {
-            return res.status(400).json({ message: "All fields are required" });
-        }
-
-        // Validate expoId format
-        if (!mongoose.Types.ObjectId.isValid(expoId)) {
-            return res.status(400).json({ message: "Invalid expoId format" });
-        }
-
-        // Check if the Expo exists
-        const expoExists = await Expo.findById(expoId);
-        if (!expoExists) {
-            return res.status(404).json({ message: "Expo not found" });
-        }
-
-        // Find an available booth matching the preference
         const booth = await Booth.findOne({
-            boothType: boothPreference, // Match by booth type
-            status: "Available",
-            expo: expoId // Ensure the booth belongs to the correct expo
+            boothType: boothPreference,
+            status: "Available", 
+            expo: new mongoose.Types.ObjectId(expoId) // Ensure matching with ObjectId
         });
 
         if (!booth) {
-            return res.status(400).json({ message: `No available booths for preference: ${boothPreference}` });
+            console.warn(`⚠️ No available booths found for type: ${boothPreference}`);
+            return null;
         }
 
-        // Register the exhibitor
-        const newExhibitor = new Exhibitor({
+        console.log(`✅ Found booth: ${booth.number}`);
+        return booth;
+    } catch (error) {
+        console.error("❌ Error finding booth:", error);
+        throw new Error("Error finding booth");
+    }
+};
+
+
+const registerExhibitor = async (req, res) => {
+    const { companyName, contactPerson, email, phone, boothPreference, expoId } = req.body;
+
+    console.log(`📩 Received Request:`, req.body);
+
+    if (!companyName || !contactPerson || !email || !phone || !boothPreference || !expoId) {
+        return res.status(400).json({ error: "All fields are required" });
+    }
+
+    try {
+        const booth = await findAvailableBooth(boothPreference, expoId);
+        if (!booth) {
+            return res.status(404).json({ message: `No available booths for preference: ${boothPreference}` });
+        }
+
+        const exhibitor = new Exhibitor({
             companyName,
             contactPerson,
             email,
             phone,
-            expoId,
             boothPreference,
-            assignedBooth: booth._id // Assign the booth to the exhibitor
+            expo: expoId,
+            booth: booth._id
         });
 
-        await newExhibitor.save();
+        await exhibitor.save();
 
-        // Update booth status to "Occupied"
-        booth.status = "Occupied";
-        booth.exhibitor = newExhibitor._id;
+        // Update booth status to "Allocated"
+        booth.status = "Allocated";
+        booth.exhibitor = exhibitor._id;
         await booth.save();
 
-        res.status(201).json({ message: "Exhibitor registered successfully!", exhibitor: newExhibitor });
-
+        console.log("✅ Exhibitor Registered Successfully");
+        res.status(201).json(exhibitor);
     } catch (error) {
-        console.error("Error registering exhibitor:", error);
-        res.status(500).json({ message: "Internal Server Error", error: error.message });
+        console.error("❌ Error registering exhibitor:", error);
+        res.status(500).json({ error: "Server error" });
     }
 };
+
 
 // ✅ Get All Exhibitors
 const getAllExhibitors = async (req, res) => {
@@ -130,4 +137,4 @@ const updateExhibitor = async (req, res) => {
     }
 };
 
-module.exports = { registerExhibitor, getAllExhibitors, updateExhibitor };
+module.exports = { registerExhibitor, getAllExhibitors, updateExhibitor,  findAvailableBooth};

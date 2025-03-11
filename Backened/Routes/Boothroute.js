@@ -42,7 +42,7 @@ router.get("/types", async (req, res) => {
         const objectExpoId = new mongoose.Types.ObjectId(expoId);
         console.log("✅ Converted Expo ID:", objectExpoId);
 
-        const boothTypes = await Booth.find({ expoId: objectExpoId }).distinct("boothNumber");
+        const boothTypes = await Booth.find({ expoId: objectExpoId }).distinct("boothType");
 
         if (!boothTypes.length) {
             return res.status(404).json({ message: "No booths found for this expo." });

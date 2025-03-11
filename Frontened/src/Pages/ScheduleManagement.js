@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Button, Modal, TextField, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import "../App.css";
 
 const ScheduleManagement = () => {
     const [schedules, setSchedules] = useState([]);
@@ -45,9 +46,11 @@ const ScheduleManagement = () => {
     };
 
     return (
-        <div>
+        <div className="container">
             <h2>Schedule Management</h2>
-            <Button variant="contained" color="primary" onClick={() => setOpen(true)}>Add Schedule</Button>
+            
+            <Button variant="contained" color="primary"  sx={{ mb: 2 }} onClick={() => setOpen(true)}>Add Schedule</Button>
+           
             <TableContainer component={Paper}>
                 <Table>
                     <TableHead>

@@ -12,7 +12,7 @@
     left: 0;
     height: 60px; /* Fix navbar height */
     box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
-    z-index: 1000; /* Ensure it stays above other content */
+    z-index: 1090; /* Ensure it stays above other content */
 }
 
 /* Navbar logo */
@@ -92,5 +92,67 @@
     display: block;
 }
 
-
+.notification-container {
+    position: relative;
+    margin-right: 20px;
+  }
+  
+  .notification-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    position: relative;
+    font-size: 20px;
+  }
+  
+  .bell-icon {
+    font-size: 24px;
+  }
+  
+  .badge {
+    position: absolute;
+    top: -5px;
+    right: -10px;
+    background: red;
+    color: white;
+    font-size: 12px;
+    padding: 3px 6px;
+    border-radius: 50%;
+  }
+  
+  .notif-dropdown {
+    position: absolute;
+    top: 40px;
+    right: 0;
+    background: white;
+    border: 1px solid #ddd;
+    width: 250px;
+    padding: 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+  }
+  
+  .notification-item {
+    border-bottom: 1px solid #eee;
+    padding: 8px;
+  }
+  
+  .notification-item:last-child {
+    border-bottom: none;
+  }
+  
+  .notification-item button {
+    background: #007bff;
+    color: white;
+    border: none;
+    padding: 5px;
+    margin-top: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+  }
+  
+  .notification-item button:hover {
+    background: #0056b3;
+  }
+  
 

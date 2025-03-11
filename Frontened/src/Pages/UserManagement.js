@@ -24,20 +24,49 @@ const UserManagement = ({ token }) => {
   }, [token]);
 
   // ✅ Handle delete user
-  const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this user?")) {
-      console.log("🗑️ Deleting User:", id);
-      try {
-        await deleteUser(id, token);
-        setUsers(users.filter((user) => user._id !== id));
-        console.log("✅ User Deleted Successfully:", id);
-      } catch (error) {
-        console.error("❌ Error deleting user:", error);
-      }
-    } else {
-      console.log("⚠️ Delete Action Canceled");
+  // const handleDelete = async (id) => {
+  //   if (window.confirm("Are you sure you want to delete this user?")) {
+  //     console.log("🗑️ Deleting User:", id);
+  //     try {
+  //       await deleteUser(id, token);
+  //       setUsers(users.filter((user) => user._id !== id));
+  //       console.log("✅ User Deleted Successfully:", id);
+  //     } catch (error) {
+  //       console.error("❌ Error deleting user:", error);
+  //     }
+  //   } else {
+  //     console.log("⚠️ Delete Action Canceled");
+  //   }
+  // };// Handle delete user
+// const handleDelete = async (id) => {
+//   if (window.confirm("Are you sure you want to delete this user?")) {
+//     console.log("🗑️ Deleting User:", id); // Log userId
+//     try {
+//       await deleteUser(id, token);
+//       setUsers(users.filter((user) => user._id !== id));
+//       console.log("✅ User Deleted Successfully:", id);
+//     } catch (error) {
+//       console.error("❌ Error deleting user:", error);
+//     }
+//   } else {
+//     console.log("⚠️ Delete Action Canceled");
+//   }
+// };
+// Handle delete user
+const handleDelete = async (id) => {
+  if (window.confirm("Are you sure you want to delete this user?")) {
+    console.log("🗑️ Deleting User:", id); // Log userId
+    try {
+      await deleteUser(id, token);
+      setUsers(users.filter((user) => user._id !== id));
+      console.log("✅ User Deleted Successfully:", id);
+    } catch (error) {
+      console.error("❌ Error deleting user:", error);
     }
-  };
+  } else {
+    console.log("⚠️ Delete Action Canceled");
+  }
+};
 
   return (
     <div className="container mt-4">

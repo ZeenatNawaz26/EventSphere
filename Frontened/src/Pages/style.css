@@ -1,179 +1,152 @@
-body {
-    margin: 0;
-    font-family: 'Arial', sans-serif;
+/* General Reset - Only affecting login/signup */
+.auth-page * {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
 
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* Only applies when the page has the .auth-page class */
+.auth-page {
+  background: black;
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+/* Login & Register Container - Only for login/signup */
+.auth-page .login-container,
+.auth-page .register-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #222;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+  text-align: center;
+  width: 350px;
+}
+
+.auth-page h1 {
+  color: white;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+/* Input Fields */
+.auth-page .input-container {
+  display: flex;
+  align-items: center;
+  background: #333;
+  border-radius: 8px;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+.auth-page .input-container select {
+  appearance: none;
+  background-color: black;
+  color: white;
+  border-radius: 5px;
+  padding: 8px;
+}
+
+.auth-page .input-container select option {
+  background-color: rgb(69, 68, 68);
+  color: white;
+}
+
+.auth-page .input-container input,
+.auth-page .input-container select {
+  width: 100%;
+  border: none;
+  background: transparent;
+  outline: none;
+  padding-left: 10px;
+  font-size: 1rem;
+  color: white;
+}
+
+.auth-page .input-container svg {
+  color: white;
+  font-size: 1.2rem;
+}
+
+/* Buttons */
+.auth-page button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.auth-page .login-button {
+  background: #444;
+  color: white;
+}
+
+.auth-page .register-button {
+  background: #555;
+  color: white;
+}
+
+.auth-page button:hover {
+  opacity: 0.8;
+}
+
+/* Signup Link */
+.auth-page .signup-link {
+  margin-top: 15px;
+  color: white;
+}
+
+.auth-page .signup-link a {
+  color: #bbb;
+  font-weight: bold;
+  text-decoration: none;
+}
+
+.auth-page .signup-link a:hover {
+  text-decoration: underline;
+  color: white;
+}
+
+/* Responsive Design */
+@media (max-width: 400px) {
+  .auth-page .login-container,
+  .auth-page .register-container {
+    width: 90%;
   }
-  
-  .login-container {
-    width: 100%;
-    max-width: 500px;
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 30px;
-  }
-  
-  .login-box {
-    text-align: center;
-  }
-  
-  .login-box h1 {
-    margin-bottom: 20px;
-    font-size: 2rem;
-    color: #333;
-  }
-  
-  .input-container {
-    position: relative;
-    margin-bottom: 20px;
-  }
-  
-  .input-container svg {
-    position: absolute;
-    top: 50%;
-    left: 10px;
-    transform: translateY(-50%);
-    color: #999;
-  }
-  
-  .input-container input {
-    width: 100%;
-    padding: 10px 10px 10px 30px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-  }
-  
-  .login-button {
-    width: 100%;
-    padding: 10px;
-    background: linear-gradient(to right, #6a11cb, #2575fc);
-    border: none;
-    border-radius: 5px;
-    color: #fff;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-  
-  .login-button:hover {
-    background: linear-gradient(to right, #5a0fb2, #1d62d9);
-  }
-  
-  .social-login {
-    margin-top: 20px;
-  }
-  
-  .social-icons {
-    display: flex;
-    justify-content: center;
-    margin-top: 10px;
-  }
-  
-  .social-icons svg {
-    font-size: 1.5rem;
-    color: #333;
-    margin: 0 10px;
-    cursor: pointer;
-  }
-  
-  .social-icons svg:hover {
-    color: #6a11cb;
-  }
-  
-  .signup-link {
-    margin-top: 20px;
-  }
-  body {
-    background: linear-gradient(to right, #7b13c0, #203899);
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-  }
-  
-  
-  
-  body {
-    margin: 0;
-    font-family: 'Arial', sans-serif;
-   
-    height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .register-container {
-    width: 100%;
-    max-width: 500px;
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    padding: 30px;
-  }
-  
-  .register-box {
-    text-align: center;
-  }
-  
-  .register-box h1 {
-    margin-bottom: 20px;
-    font-size: 2rem;
-    color: #333;
-  }
-  
-  .input-container {
-    position: relative;
-    margin-bottom: 20px;
-  }
-  
-  .input-container svg {
-    position: absolute;
-    top: 50%;
-    left: 10px;
-    transform: translateY(-50%);
-    color: #999;
-  }
-  
-  .input-container input,
-  .input-container select {
-    width: 100%;
-    padding: 10px 10px 10px 30px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
-    font-size: 1rem;
-  }
-  
-  .register-button {
-    width: 100%;
-    padding: 10px;
-    background: linear-gradient(to right, #6a11cb, #2575fc);
-    border: none;
-    border-radius: 5px;
-    color: #fff;
-    font-size: 1rem;
-    cursor: pointer;
-  }
-  
-  .register-button:hover {
-    background: linear-gradient(to right, #5a0fb2, #1d62d9);
-  }
-  
-  .signup-link {
-    margin-top: 20px;
-    text-align: center;
-  }
-  
-  .signup-link a {
-    color: #6a11cb;
-    text-decoration: none;
-  }
-  
-  .signup-link a:hover {
-    text-decoration: underline;
-  }
-  
+}
+
+/* Forgot Password Page */
+.auth-page .forgot-password-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #222;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(255, 255, 255, 0.1);
+  text-align: center;
+  width: 350px;
+}
+
+.auth-page .forgot-password-box h1 {
+  color: white;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+.auth-page .message {
+  color: #bbb;
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+}

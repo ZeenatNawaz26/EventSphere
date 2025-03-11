@@ -17,7 +17,9 @@ const messageRoutes = require("./Routes/messageRoutes");
 const eventRoutes = require("./Routes/event_route");
 const settingsRoutes = require("./Routes/settings_route");
 const notificationRoutes = require("./Routes/notificationroute");
-
+const feedbackRoutes = require("./Routes/feedback_routes");
+const contactRoutes = require('./Routes/contact');
+const userpassRoutes = require("./Routes/users-pass"); // ✅ Correct
 const app = express();
 app.use(express.json());
 
@@ -41,6 +43,9 @@ app.use("/api/messages", messageRoutes);
 app.use("/api/events", eventRoutes);
 app.use("/api/settings", settingsRoutes);
 app.use("/api/notifications", notificationRoutes);
+app.use("/api/feedback", feedbackRoutes)
+app.use('/api/contact', contactRoutes);
+app.use("/api/users-pass", userpassRoutes); // ✅ This must be here
 
 mongoose
   .connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
